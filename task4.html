@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <title>API REQUEST SERVER FILTER</title>
+    </head>
+    <body>
+        <div>
+            <input type="text" id="searchInput" placeholder="Въведете ID на потребител">
+                <button id="searchButton" class="btn btn-primary">Търси</button>
+                <table id="usersTable" class="table table-bordered w-25">
+                    <thead>
+                        <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Last name</th>
+                        <th>Age</th>
+                        <th>Salary</th>
+                        </tr>
+                    </thead>
+                <tbody>
+                </tbody>
+                </table>
+
+        </div>
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+        <script>
+            $(document).ready(function() {
+                $('#searchButton').click(function() {
+                    var userId = $('#searchInput').val();
+                    var url = 'https://old.blacatzacademy.com/api/users?id=' + userId;
+
+                        $.ajax({
+                        url: url,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(response) {
+                            
+                            $('#usersTable tbody').empty();
+
+                            if (response.length > 0) {
+                            var user = response[0];
+                            var row = $('<tr>').appendTo('#usersTable tbody');
+                            $('<td>').text(user.id).appendTo(row);
+                            $('<td>').text(user.name).appendTo(row);
+                            $('<td>').text(user.lastName).appendTo(row);
+                            $('<td>').text(user.age).appendTo(row);
+                            $('<td>').text(user.salary).appendTo(row);
+                            } else {
+                            $('<tr><td colspan="4">Няма намерени потребители</td></tr>').appendTo('#usersTable tbody');
+                            }
+                        },
+                    error: function(xhr, status, error) {
+                        console.log('Грешка при изпълнение на AJAX заявка: ' + error);
+                    }
+                    });
+                });
+                });
+
+        </script>
+    </body>
+</html>
